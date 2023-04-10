@@ -1,12 +1,19 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3000  //w3
+const jwt = require('jsonwebtoken')
+
 
 //app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 });
+
+app.get('/token', verifytoken, (req, res) => {
+  console.log(req.user)
+});
+
 
 app.post('/bye', (req, res) => {
     let data = req.body
@@ -33,6 +40,7 @@ let dbUsers = [
 
   {
       username: "Elvin",
+      password: "hahaha",
       name: "Elvin",
       email: "elvin@utem.edu.my"
   }
@@ -42,8 +50,8 @@ function login(username, password)
 {
   console.log("someone try to login with", username, password)
 
-  let matched = dbUsers.find (element =>
-      element.username == username
+  let matched = dbUsers.find (key =>
+      key.username == username
   )
   if (matched) 
   {
@@ -68,8 +76,8 @@ function login(username, password)
 function register(newusername,newpassword,newname,newemail)
 {
   // TODO: Check if username exist
-  let matched = dbUsers.find (element =>
-      element.username == newusername)
+  let matched = dbUsers.find (key =>
+      key.username == newusername)
 
       if (matched)
       {
@@ -90,23 +98,51 @@ function register(newusername,newpassword,newname,newemail)
       }
 }
 
+//week4
+function generatetoken(userProfile){
+  return jwt.sign(
+    userProfile
+    //data 'foobar'
+  ,'secret', {expiresIn: 60*60});
+}
+
+function verifytoken(req, res, next){
+  let header = req.headers.authorization
+  console.log(header)
+
+  let token = header.split('')[1]
+
+  jwt.verify(token, 'secret', function(err,decoded){
+    if(err){
+      res.send("Invalid Token")
+    }
+    req.user = decoded //bar
+    next()
+  });
+
+}
+
+//week3
 // enable json body parsing
 app.use(express.json());
 
 app.post('/hi', (req,res) => {
   let data = req.body
-  res.send('Post request' + JSON.stringify(data));
+  res.send('Post request' + JSON.stringify(data))
 }); 
 
-app.post('/hi1', (req,res) => {
+app.post('/login', (req,res) => {
   let data = req.body
-  res.send(
-    login(
-      data.username,
-      data.password
-    )
-  );
-}); 
+  //res.send(
+    //login(
+      //data.username,
+      //data.password
+      const user = login(data.username, data.password)
+      res.send(generatetoken(user))
+});
+
+  
+ 
 
 app.post('/register', (req,res) => {
   let data = req.body

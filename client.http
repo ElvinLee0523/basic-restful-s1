@@ -1,10 +1,12 @@
-GET http://localhost:3000/
+GET http://localhost:3000/token
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRhbiIsInBhc3N3b3JkIjoiMTIzNDU2NzgiLCJuYW1lIjoidGFuIiwiZW1haWwiOiJ0YW5AZ21haWwuY29tIiwiaWF0IjoxNjgxMTEyMTc0LCJleHAiOjE2ODExMTU3NzR9.8-3NHRdp7kzUBUoQ3JceORWQvzWGW93FPG12tBIZRAU
+
 ###
-POST http://localhost:3000/hi1
+POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "username": "abcdefg", 
+    "username": "tan", 
     "password": "12345678"
    
 }
@@ -13,9 +15,12 @@ POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-    "newusername": "abcdefg", 
+    "newusername": "tan", 
     "newpassword": "12345678",
-    "newname":"pussy",
-    "newemail": "penis@gmail.com"
+    "newname":"tan",
+    "newemail": "tan@gmail.com"
    
 }
+
+###
+POST http://localhost:3000/hi
