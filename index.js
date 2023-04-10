@@ -12,6 +12,7 @@ app.get('/', (req, res) => {
 
 app.get('/token', verifytoken, (req, res) => {
   console.log(req.user)
+  res.send('Login successful')
 });
 
 
@@ -110,14 +111,16 @@ function verifytoken(req, res, next){
   let header = req.headers.authorization
   console.log(header)
 
-  let token = header.split('')[1]
+  let token = header.split(' ')[1]
 
   jwt.verify(token, 'secret', function(err,decoded){
     if(err){
       res.send("Invalid Token")
     }
-    req.user = decoded //bar
-    next()
+    else{
+      req.user = decoded //bar
+     }
+      next()
   });
 
 }
@@ -137,7 +140,7 @@ app.post('/login', (req,res) => {
     //login(
       //data.username,
       //data.password
-      const user = login(data.username, data.password)
+      let user = login(data.username, data.password)
       res.send(generatetoken(user))
 });
 
